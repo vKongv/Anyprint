@@ -1,5 +1,6 @@
 <?php
   include('usersession.php');
+  //include('request_access_token.php');
 ?>
 <!DOCTYPE html>
 <html>
@@ -7,13 +8,9 @@
     <title>Your Home Page</title>
     <!-- Import polymer HTML files-->
     <link rel="import" href="bower_components/paper-toolbar/paper-toolbar.html">
-    <link rel="import" href="bower_components/paper-tabs/paper-tabs.html">
     <link rel="import" href="bower_components/iron-flex-layout/iron-flex-layout.html">
     <link rel="import" href="bower_components/paper-card/paper-card.html">
-    <link rel="import" href="bower_components/iron-image/iron-image.html">
     <link rel="import" href="bower_components/paper-button/paper-button.html">
-    <link rel="import" href="bower_components/iron-ajax/iron-ajax.html">
-    <link rel="import" href="bower_components/iron-media-query/iron-media-query.html">
     <link rel="import" href="bower_components/paper-drawer-panel/paper-drawer-panel.html">
     <link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
     <link rel="import" href="bower_components/iron-icons/iron-icons.html">
@@ -25,6 +22,8 @@
     <link rel="import" href="bower_components/font-roboto/roboto.html">
     <link rel="import" href="element/business-home.html">
     <link rel="import" href="element/business-add-printer.html">
+
+    <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
     <style>
       body {
         font-family: Roboto;
@@ -44,7 +43,7 @@
       <paper-drawer-panel class="flex">
         <paper-header-panel drawer>
           <paper-toolbar drawer>
-            <div>Application</div>
+            <div>AnyPrint</div>
           </paper-toolbar>
           <paper-menu selected={{select}} drawer>
             <paper-item>Home Page</paper-item>
@@ -56,18 +55,28 @@
         </paper-header-panel>
         <paper-header-panel main>
           <paper-toolbar>
-            <div>Welcome back</div>
             <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
+            <div>Welcome back</div>
           </paper-toolbar>
           <neon-animated-pages selected="{{select}}">
             <business-home user-id="400001"></business-home>
-            <business-add-printer></business-add-printer>
+            <business-add-printer id='add-printer-page'></business-add-printer>
+            <neon-animation>Pending print request</neon-animation>
+            <neon-animation>Manage Printer</neon-animation>
           </neon-animated-pages>
         </paper-header-panel>
       </paper-drawer-panel>
     </template>
   </body>
 
+  <script>
+    //When the element is finished loaded, set the login based on the attribute
+    document.addEventListener('finished_attached', function() {
+      //Testing purpose
+      console.log('Loaded');
+      document.querySelector('#add-printer-page').usableToken = false;
+    }, false);
+  </script>
 
     <!-- <div id="profile">
       <b id="welcome">Welcome : <i><?php echo $login_session; ?></i></b>

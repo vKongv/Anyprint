@@ -21,10 +21,11 @@
       on-error="onFirebaseError"
       on-login="onFirebaseLogin"></firebase-auth>
     <paper-toast id="errorToast"></paper-toast>
-    <iron-swipeable-container>
+
     <div style="max-width: 600px; margin-top: 20px; margin-left: auto; margin-right: auto; @apply(--layout-vertical); @apply(--center-justified);">
       <template is="dom-repeat" items="{{items}}">
         <!--Card's ID is set based on item.uid-->
+        <iron-swipeable-container>
         <paper-card id = "card{{item.uid}}" heading="{{item.title}}" style="width: 100%; margin-bottom: 16px;">
           <div class="card-content">{{item.message}}</div>
           <div class="card-actions">
@@ -32,9 +33,10 @@
             <paper-icon-button id="dismissAction" on-click="dismissNotification" icon="clear" title="Open"></paper-icon-button>
           </div>
         </paper-card>
+        </iron-swipeable-container>
       </template>
     </div>
-    </iron-swipeable-container>
+
   </template>
 
   <script>
@@ -63,8 +65,8 @@
             return;
           }
           item.uid = childSnapshot.key();
-          app.push('items', item);
-        }.bind(app));
+          this.push('items', item);
+        }.bind(this));
       },
       onFirebaseError: function(event) {
         this.$.errorToast.text = event.detail.message;

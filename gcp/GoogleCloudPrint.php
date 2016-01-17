@@ -31,7 +31,7 @@ class GoogleCloudPrint {
 
 	const PRINTERS_SEARCH_URL = "https://www.google.com/cloudprint/search";
 	const PRINT_URL = "https://www.google.com/cloudprint/submit";
-    const JOBS_URL = "https://www.google.com/cloudprint/jobs";
+  const JOBS_URL = "https://www.google.com/cloudprint/jobs";
 
 	private $authtoken;
 	private $httpRequest;
@@ -103,6 +103,7 @@ class GoogleCloudPrint {
 		$this->httpRequest->setPostData($post_fields);
 		$this->httpRequest->send();
 		$response = json_decode($this->httpRequest->getResponse());
+		print($this->httpRequest->getResponse());
 		return $response;
 	}
 

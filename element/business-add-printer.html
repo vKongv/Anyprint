@@ -1,35 +1,37 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="../bower_components/google-signin/google-signin-aware.html">
-<link rel="import" href="../bower_components/google-signin/google-signin.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
 <dom-module id="business-add-printer">
   <template>
-    <google-signin brand="google" width="wide" theme="dark" client-id="283009116901-pjono5f003dd65jeej9d1gh81o9f04rl.apps.googleusercontent.com"></google-signin>
-    <google-signin-aware
-      scopes="{{scope}}"
-      signed-in="{{signedIn}}"
-      offline
-      is-authorized="{{isAuthorized}}"
-      on-google-signin-aware-success="handleSignIn"
-      on-google-signin-offline-success="handleOffline"
-      on-google-signin-aware-signed-out="handleSignOut"></google-signin-aware>
-      <p id="signinmessage">{{signInMessage}}</p>
-      <p id="offlinetoken">{{offlineToken}}</p>
+    <paper-button id="g-signin" raised on-click="login">Login with Google</paper-button>
   </template>
 
   <script>
     Polymer({
       is: 'business-add-printer',
+      attached: function() {
+        this.fire('finished_attached',{done: 'true'});
+        //attached function, used to get element id
+      },
+      properties: {
+        usableToken: {
+          type: Boolean,
+          notify: true,
+          observer: 'loginChanged'
+        }
+      },
+      loginChanged: function(event){
+        if(this.usableToken){
+          var btn = document.querySelector('#g-signin');
+          btn.style.visibility = "hidden";
+        }
+      },
+    login: function(){
+      window.location= 'http://localhost/anyprint/gcp/oAuthRedirect.php?op=offline';
+    },
       ready: function(){
-        this.scope = "https://www.googleapis.com/auth/cloudprint";
-      },
-      handleSignIn: function(response){
-        this.signInMessage = "Signed in";
-      },
-      handleOffline: function(response){
-        this.offlineToken = response.detail.code;
-      },
-      handleSignOut: function(response){
-        //Sign out
+        //used to set value
+        // this.offlineToken = "";
+        // this.scope = "https://www.googleapis.com/auth/cloudprint";
       }
     });
   </script>

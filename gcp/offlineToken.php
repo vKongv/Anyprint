@@ -10,7 +10,6 @@
       $numOfRows = $dbcon->affected_rows; //Retrieve number of row affected
 
       if($numOfRows > 0){
-        echo "OK";
         header("Location: ../businessprofile.php");
       } else {
         echo "Error";

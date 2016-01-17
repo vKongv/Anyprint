@@ -15,7 +15,7 @@
  <title>Login</title>
 
    <meta charset="utf-8"/>
-   <meta http-equiv="content-type" content="text/html"; charset="utf-8" />
+   <meta http-equiv="content-type" content="text/html" />
    <meta name ="viewport" content="width=device-width, initial-scale=1" />
 
    <link rel="import" href="bower_components/paper-input/paper-input.html" />
@@ -25,6 +25,7 @@
    <link rel="import" href="bower_components/iron-flex-layout/iron-flex-layout.html">
    <link rel="import" href="bower_components/font-roboto/roboto.html">
 
+   <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
    <style>
      body {
        font-family: Roboto;
@@ -60,33 +61,32 @@
     </template>
 
  <script>
-      var app = document.querySelector('#app');
-      var canSubmit = true;
+  var app = document.querySelector('#app');
+  var canSubmit = true;
+  var submitHandler = function(){
+     //Validate input
+     alert("Username: " + app.uname + "Password: " + app.upassword);
+     if(app.uname == ""){
+       canSubmit = false;
+       return;
+     }
+      if(app.upassword == ""){
+       canSubmit = false;
+       return;
+     }
 
-     var submitHandler = function(){
-         //Validate input
-         alert("Username: " + app.uname + "Password: " + app.upassword);
-         if(app.uname == ""){
-           canSubmit = false;
-           return;
-         }
-         if(app.upassword == ""){
-           canSubmit = false;
-           return;
-         }
-
-         //If all input OK, then submit
-         if(canSubmit){
-           app.formUName = app.uname;
-           app.formUPassword = app.upassword;
-           alert("Form uname: " + app.formUName + " Form Password: " + app.formUPassword);
-           app.$.formlogin.submit();
-         }
-         else{
-           alert("invalid");
-           return;
-         }
-       }
+      //If all input OK, then submit
+     if(canSubmit){
+       app.formUName = app.uname;
+       app.formUPassword = app.upassword;
+       alert("Form uname: " + app.formUName + " Form Password: " + app.formUPassword);
+        app.$.formlogin.submit();
+     }
+      else{
+        alert("invalid");
+        return;
+      }
+    }
     </script>
  </body>
  </html>

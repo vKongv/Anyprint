@@ -82,7 +82,7 @@ class GoogleCloudPrint {
 
 	public function getAccessTokenByRefreshToken($url,$post_fields) {
 		$responseObj =  $this->getAccessToken($url,$post_fields);
-		return $responseObj->access_token;
+		return $responseObj;
 	}
 
 
@@ -103,7 +103,6 @@ class GoogleCloudPrint {
 		$this->httpRequest->setPostData($post_fields);
 		$this->httpRequest->send();
 		$response = json_decode($this->httpRequest->getResponse());
-		print($this->httpRequest->getResponse());
 		return $response;
 	}
 

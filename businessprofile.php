@@ -1,6 +1,7 @@
 <?php
   include('usersession.php');
   //include('request_access_token.php');
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -61,7 +62,7 @@
           <neon-animated-pages selected="{{select}}">
             <business-home user-id="400001"></business-home>
             <business-add-printer id='add-printer-page'></business-add-printer>
-            <neon-animation>Pending print request</neon-animation>
+            <neon-animation><?php echo $_SESSION['access_token']; ?></neon-animation>
             <neon-animation>Manage Printer</neon-animation>
           </neon-animated-pages>
         </paper-header-panel>

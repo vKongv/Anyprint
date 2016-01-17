@@ -10,6 +10,7 @@
       $numOfRows = $dbcon->affected_rows; //Retrieve number of row affected
 
       if($numOfRows > 0){
+        $_SESSION['refresh_token'] = $refreshToken;
         header("Location: ../businessprofile.php");
       } else {
         echo "Error";

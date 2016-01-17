@@ -26,7 +26,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
     //Get JSON file that contain Client ID and Client Secret
-    $json_data = file_get_contents('../client.json');
+    $json_data = file_get_contents('client.json');
     $json_arr = json_decode($json_data, true);
     $redirectConfig = array(
         'client_id' 	=> $json_arr["web"]["client_id"],

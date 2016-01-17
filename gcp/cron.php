@@ -1,6 +1,6 @@
 <?php
 
-// To add printers to your account follow the following link 
+// To add printers to your account follow the following link
 // https://support.google.com/cloudprint/answer/1686197
 /**
  * PHP implementation of Google Cloud Print
@@ -21,12 +21,12 @@
 
 require_once 'Config.php';
 require_once 'GoogleCloudPrint.php';
-    
+
 // Create object
 $gcp = new GoogleCloudPrint();
 
 // Replace token you got in offlineToken.php
-$refreshTokenConfig['refresh_token'] = 'YOUR-OFFLINE-ACCESS-TOKEN';
+$refreshTokenConfig['refresh_token'] = '1/VJYcjvBzkOmyvtPPfe7MUFOkV8YXJNB8nhJoJtxBcK8';
 
 $token = $gcp->getAccessTokenByRefreshToken($urlconfig['refreshtoken_url'],http_build_query($refreshTokenConfig));
 
@@ -37,18 +37,18 @@ $printers = $gcp->getPrinters();
 
 $printerid = "";
 if(count($printers)==0) {
-	
+
 	echo "Could not get printers";
 	exit;
 }
 else {
-	
+
 	$printerid = $printers[0]['id']; // Pass id of any printer to be used for print
 	// Send document to the printer
 	$resarray = $gcp->sendPrintToPrinter($printerid, "Printing Doc using Google Cloud Printing", "./pdf.pdf", "application/pdf");
-	
+
 	if($resarray['status']==true) {
-		
+
 		echo "Document has been sent to printer and should print shortly.";
 	}
 	else {

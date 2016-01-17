@@ -1,14 +1,21 @@
 <!DOCTYPE HTML>
 <?php
   if (isset($_GET['err'])){
-    if($_GET['err'] == 1){
+    $errCode = $_GET['err'];
+    if($errCode == "invaliduser"){
       ?>
       <script>
         alert('Incorrect username or password');
       </script>
     <?php
+  }else if($errCode == "invalidtoken"){
+        ?>
+        <script>
+          alert('Invalid token');
+        </script>
+    <?php
+      }
     }
-  }
 ?>
 <html>
 <head>
@@ -65,7 +72,6 @@
   var canSubmit = true;
   var submitHandler = function(){
      //Validate input
-     alert("Username: " + app.uname + "Password: " + app.upassword);
      if(app.uname == ""){
        canSubmit = false;
        return;
@@ -79,11 +85,10 @@
      if(canSubmit){
        app.formUName = app.uname;
        app.formUPassword = app.upassword;
-       alert("Form uname: " + app.formUName + " Form Password: " + app.formUPassword);
-        app.$.formlogin.submit();
+       app.$.formlogin.submit();
      }
       else{
-        alert("invalid");
+        alert("Username or password cannot be blank");
         return;
       }
     }

@@ -1,7 +1,27 @@
 <?php
   include('usersession.php');
   //include('request_access_token.php');
-
+  ?>
+  <script>
+    var validToken;
+  </script>
+  <?php
+  if(isset($_GET['token']) && !empty($_GET['token'])) {
+    $validToken = $_GET['token'];
+    if($validToken == "true"){
+      ?>
+      <script>
+        validToken = true;
+      </script>
+<?php
+    } else if ($validToken == "false"){
+        ?>
+        <script>
+          validToken = false;
+        </script>
+<?php
+    }
+  }
 ?>
 <!DOCTYPE html>
 <html>
@@ -75,17 +95,11 @@
     document.addEventListener('finished_attached', function() {
       //Testing purpose
       console.log('Loaded');
-      document.querySelector('#add-printer-page').usableToken = false;
+      if(validToken){
+        document.querySelector('#add-printer-page').usableToken = true;
+      } else{
+        document.querySelector('#add-printer-page').usableToken = false;
+      }
     }, false);
   </script>
-
-    <!-- <div id="profile">
-      <b id="welcome">Welcome : <i><?php echo $login_session; ?></i></b>
-      <b id="logout"><a href="logout.php">Log Out</a></b>
-    </div>
-    <form method="get" action="oAuthRedirect.php">
-      <input type="hidden" name="op" value="offline"/>
-      <input type = "submit" value = "Sign in with Google"/>
-    </form>
-  </body> -->
 </html>

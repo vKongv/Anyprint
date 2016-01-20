@@ -19,9 +19,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+include '../config.php';
 require_once 'Config.php';
 require_once 'GoogleCloudPrint.php';
 
+session_start();
 // Create object
 $gcp = new GoogleCloudPrint();
 
@@ -30,30 +32,21 @@ $refreshTokenConfig['refresh_token'] = '1/VJYcjvBzkOmyvtPPfe7MUFOkV8YXJNB8nhJoJt
 
 $token = $gcp->getAccessTokenByRefreshToken($urlconfig['refreshtoken_url'],http_build_query($refreshTokenConfig));
 
-$gcp->setAuthToken($token);
+$gcp->setAuthToken($token->access_token);
 
 $printers = $gcp->getPrinters();
-//print_r($printers);
+$uid = $_SESSION['login_uid'];
+$sqlcmd = "SELECT P_ID_G FROM user,printer,printing_shop WHERE user.U_ID = $uid AND user.U_ID = printing_shop.U_ID AND printing_shop.PS_ID = printer.PS_ID;";
+$dataRetrieve = mysqli_query($dbcon,$sqlcmd);
 
-$printerid = "";
-if(count($printers)==0) {
-
-	echo "Could not get printers";
-	exit;
-}
-else {
-
-	$printerid = $printers[0]['id']; // Pass id of any printer to be used for print
-	// Send document to the printer
-	$resarray = $gcp->sendPrintToPrinter($printerid, "Printing Doc using Google Cloud Printing", "./pdf.pdf", "application/pdf");
-
-	if($resarray['status']==true) {
-
-		echo "Document has been sent to printer and should print shortly.";
-	}
-	else {
-		echo "An error occured while printing the doc. Error code:".$resarray['errorcode']." Message:".$resarray['errormessage'];
+while($row = mysqli_fetch_row($dataRetrieve)){
+	for($i=0; $i<count($printers);$i++){
+		if($printers[$i]['id'] == $row[0]){
+			$printers[$i]['added'] = 'disabled';
+		}
 	}
 }
+
+print json_encode($printers);
 
 ?>

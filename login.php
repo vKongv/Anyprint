@@ -11,10 +11,15 @@
   }else if($errCode == "invalidtoken"){
         ?>
         <script>
-          alert('Invalid token');
+          alert('Please sign in for your Google account.');
         </script>
     <?php
+      header("Location: gcp/oAuthRedirect.php?op=offline");
       }
+    }
+
+    if (isset($_SESSION['login_uid']) && !empty($_SESSION['login_uid'])){
+      header("Location: businessprofile.php");
     }
 ?>
 <html>

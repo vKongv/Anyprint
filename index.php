@@ -16,7 +16,7 @@
 </head>
 
 <body>
-  <p><img src="" alt="small-logo"/><a href="#">About</a>    <a href="#">Features</a>    <a href="#">Printing Shop</a>    <a href="login.html">Login</a>    <a href="signup.html">Sign Up</a></p>
+  <p><img src="" alt="small-logo"/><a href="#">About</a>    <a href="#">Features</a>    <a href="#">Printing Shop</a>    <a href="login.php">Login</a>    <a href="signup.html">Sign Up</a></p>
 
   <br />  <br />  <br />  <br />  <br />
 

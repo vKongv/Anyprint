@@ -46,11 +46,11 @@
              } else{
                 $_SESSION['access_token'] = $gcpResponse->error;
                 $_SESSION['refresh_token'] = "ERROR";
-                header("location: login.php?err=invalidtoken");
+                header("location: businessprofile.php?token=false");
                 exit();
              }
             $_SESSION['login_uid']=$uid; // Initializing Session
-            header("location: businessprofile.php"); // Redirecting To Other Page
+            header("location: businessprofile.php?token=true"); // Redirecting To Other Page
           }//end if ($type == "BO")
           //If is normal user, redirect to normal user page
           else if($type == "NORMAL"){

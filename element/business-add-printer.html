@@ -1,10 +1,32 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/firebase-element/firebase-auth.html">
+<link rel="import" href="../bower_components/firebase-element/firebase.html">
+<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <dom-module id="business-add-printer">
   <template>
-    <paper-button id="g-signin" raised on-click="login">Login with Google</paper-button>
+    <paper-button class="fancy" id="g-signin" raised on-click="login">Login with Google</paper-button>
+    <button on-click="toggleButton">Toggle</button>
+    <paper-toast id="errorToast2"></paper-toast>
+    <iron-ajax
+      auto
+      url="http://localhost/anyprint/getprinter.php?q=printer"
+      params='{"q":"printer"}'
+      handle-as="json"
+      last-response="{{printers}}"></iron-ajax>
+    <template is="dom-repeat" items=[[printers]]>
+      <div>
+        <p>[[item.displayName]]  <button id="addbtn"type="button" disabled="[[item.added]]" on-click="goto">Add this printer</button></p>
+      </div>
+    </template>
   </template>
-
+  <style>
+    paper-button.fancy {
+      background: blue;
+      color: white;
+    }
+  </style>
   <script>
     Polymer({
       is: 'business-add-printer',
@@ -20,15 +42,45 @@
         }
       },
       loginChanged: function(event){
+        var toast = document.querySelector('#errorToast2');
         if(this.usableToken){
           var btn = document.querySelector('#g-signin');
-          btn.style.visibility = "hidden";
+          btn.style.display = "none";
+        }
+        else {
+          toast.text = "Please login with your Google Account to add printer to AnyPrint";
+          toast.open();
         }
       },
-    login: function(){
-      window.location= 'http://localhost/anyprint/gcp/oAuthRedirect.php?op=offline';
-    },
+      login: function(){
+        window.location= 'http://localhost/anyprint/gcp/oAuthRedirect.php?op=offline';
+      },
+      toggleButton: function(){
+        var btn = document.querySelector('#g-signin');
+        if (btn.style.display == "none"){
+          btn.style.display = "inline-block";
+        } else{
+          btn.style.display = "none";
+        }
+        var toast = document.querySelector('#errorToast2');
+        toast.text = "Hello~";
+        toast.open();
+      },
+      updateItems: function(snapshot) {
+        var app = document.querySelector('business-home');
+        snapshot.forEach(function(childSnapshot) {
+          var printer = childSnapshot.val();
+          printer.uid = childSnapshot.key();
+          this.push('printers', printer);
+        }.bind(this));
+      },
+      goto: function(event){
+         var url = 'http://localhost/anyprint/addprinter.php?pid=' + event.model.item.id + '&pname=' + event.model.item.name + '&pstatus=' + event.model.item.connectionStatus;
+         window.location = url;
+      },
       ready: function(){
+        this.firebaseURL = 'https://realanyprint.firebaseio.com';
+        this.firebaseProvider = 'anonymous';
         //used to set value
         // this.offlineToken = "";
         // this.scope = "https://www.googleapis.com/auth/cloudprint";

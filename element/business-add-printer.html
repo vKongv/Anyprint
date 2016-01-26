@@ -11,13 +11,13 @@
     <paper-toast id="errorToast2"></paper-toast>
     <iron-ajax
       auto
-      url="http://localhost/anyprint/getprinter.php?q=printer"
-      params='{"q":"printer"}'
+      url="http://localhost/anyprint/getprinter.php"
+      params='{"q":"gcp"}'
       handle-as="json"
       last-response="{{printers}}"></iron-ajax>
     <template is="dom-repeat" items=[[printers]]>
       <div>
-        <p>[[item.displayName]]  <button id="addbtn"type="button" disabled="[[item.added]]" on-click="goto">Add this printer</button></p>
+        <p>[[item.displayName]]  <button id="addbtn" type="button" disabled="[[item.added]]" on-click="goto">Add this printer</button></p>
       </div>
     </template>
   </template>

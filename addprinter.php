@@ -27,8 +27,7 @@
       $insertData = mysqli_query($dbcon,$sqlcmd);
       print('after insert');
       if($insertData){
-        echo "<script type='text/javascript'>alert('Successful register printer');</script>";
-        //header("Location: businessprofile.php");
+        header("Location: businessprofile.php");
       }//end if($errMsg == "")
       else{
          $errMsg = "Unknown error occur. Please try again later.";

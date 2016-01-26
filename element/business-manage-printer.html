@@ -1,0 +1,65 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<dom-module id="business-manage-printer">
+  <template>
+    <iron-ajax
+      auto
+      url="http://localhost/anyprint/getprinter.php"
+      params='{"q":"local"}'
+      handle-as="json"
+      last-response="{{printers}}"></iron-ajax>
+    <iron-list items="[[printers]]" as="item">
+      <template>
+        <div class="item">
+          <div class="details">
+            <div class="primary">
+              Name: <span>[[item.name]]</span>
+            </div>
+            <div class="secondary">
+              ID: <span>[[item.id]]</span>
+              <span class="space-left">Status: <span>[[item.status]]</span></span>
+            </div>
+          </div>
+          <div>
+            <button id="deleteBtn" type="button" on-click="goto">Remove from system</button>
+        </div>
+      </template>
+    </iron-list>
+  </template>
+  <style>
+    :host {
+      display: block;
+    }
+    .item{
+      @apply(--layout-horizontal);
+      padding: 16px 22px;
+      border-bottom: 1px solid #DDD;
+    }
+    .details {
+      @apply(--layout-flex);
+      @apply(--layout-vertical);
+    }
+    .primary {
+      font-size: 24px;
+    }
+    .space-left{
+      margin-left: 30px;
+    }
+  </style>
+  <script>
+    Polymer({
+      is: 'business-manage-printer',
+      attached: function() {
+        this.fire('finished_attached_manage',{done: 'true'});
+        //attached function, used to get element id
+      },
+      goto: function(event){
+         var url = 'http://localhost/anyprint/deleteprinter.php?pid=' + event.model.item.id;
+         window.location = url;
+      },
+    });
+  </script>
+</dom-module>

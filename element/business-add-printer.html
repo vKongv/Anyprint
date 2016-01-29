@@ -75,7 +75,7 @@
         }.bind(this));
       },
       goto: function(event){
-         var url = 'http://localhost/anyprint/addprinter.php?pid=' + event.model.item.id + '&pname=' + event.model.item.name + '&pstatus=' + event.model.item.connectionStatus;
+         var url = 'http://localhost/anyprint/addprinter.php?pid=' + event.model.item.id + '&pname=' + event.model.item.name + '&pstatus=' + event.model.item.connectionStatus + '&pcolor=' + event.model.item.color;
          window.location = url;
       },
       ready: function(){

@@ -30,6 +30,7 @@ require_once 'HttpRequest.Class.php';
 class GoogleCloudPrint {
 
 	const PRINTERS_SEARCH_URL = "https://www.google.com/cloudprint/search";
+	const PRINTERS_LOOKUP_URL = "https://www.google.com/cloudprint/printer";
 	const PRINT_URL = "https://www.google.com/cloudprint/submit";
   const JOBS_URL = "https://www.google.com/cloudprint/jobs";
 
@@ -126,21 +127,44 @@ class GoogleCloudPrint {
 		"Authorization: Bearer " .$this->authtoken
 		);
 
+		$printers;
 		$this->httpRequest->setUrl(self::PRINTERS_SEARCH_URL);
 		$this->httpRequest->setHeaders($authheaders);
 		$this->httpRequest->send();
 		$responsedata = $this->httpRequest->getResponse();
 		// Make Http call to get printers added by user to Google Cloud Print
-		$printers = json_decode($responsedata);
+		$printersJSON = json_decode($responsedata);
 		// Check if we have printers?
-		if(is_null($printers)) {
+		if(is_null($printersJSON)) {
 			// We dont have printers so return blank array
 			return array();
 		}
 		else {
 			// We have printers so returns printers as array
-			return $this->parsePrinters($printers);
+			$printers = $this->parsePrinters($printersJSON);
 		}
+		//To know whether the printer can print colour or not
+		$i = 0;
+		foreach($printers as $printer){
+			$post_fields = array(
+				'printerid' => $printer['id']
+			);
+			$this->httpRequest->setUrl(self::PRINTERS_LOOKUP_URL);
+			$this->httpRequest->setHeaders($authheaders);
+			$this->httpRequest->setPostData($post_fields);
+			$this->httpRequest->send();
+			$responsedata = $this->httpRequest->getResponse();
+			$capabilities = json_decode($responsedata);
+			if(count($capabilities->printers[0]->capabilities->printer->color->option) > 1){
+				$printers[$i]['color'] = "1";
+			}else {
+				$printers[$i]['color'] = "0";
+			}
+		}
+		return $printers;
+	}
+
+	public function getSpecificPrinter($printerid){
 
 	}
 
@@ -155,9 +179,9 @@ class GoogleCloudPrint {
 	 *
 	 * @param File Path $filepath      // Path to the file to be send to Google Cloud Print
 	 *
-	 * @param Content Type $contenttype // File content type e.g. application/pdf, image/png for pdf and images
+	 * @param Ticket $ticket // print ticket
 	 */
-	public function sendPrintToPrinter($printerid,$printjobtitle,$filepath,$contenttype) {
+	public function sendPrintToPrinter($printerid,$printjobtitle,$filepath,$ticket) {
 
 	// Check if we have auth token
 		if(empty($this->authtoken)) {
@@ -179,15 +203,14 @@ class GoogleCloudPrint {
 		// Read file content
 		$contents = fread($handle, filesize($filepath));
 		fclose($handle);
-
 		// Prepare post fields for sending print
 		$post_fields = array(
-
 			'printerid' => $printerid,
 			'title' => $printjobtitle,
 			'contentTransferEncoding' => 'base64',
 			'content' => base64_encode($contents), // encode file content as base64
-			'contentType' => $contenttype
+			'ticket' => $ticket,
+			'contentType' => "application/pdf"
 		);
 		// Prepare authorization headers
 		$authheaders = array(
@@ -207,7 +230,7 @@ class GoogleCloudPrint {
 		// Has document been successfully sent?
 		if($response->success=="1") {
 
-			return array('status' =>true,'errorcode' =>'','errormessage'=>"", 'id' => $response->job->id);
+			return array('status' =>$response->job->status,'errorcode' =>'','errormessage'=>"", 'id' => $response->job->id);
 		}
 		else {
 
@@ -248,9 +271,12 @@ class GoogleCloudPrint {
 
 		$printers = array();
 		if (isset($jsonobj->printers)) {
+			$i = 0;
 			foreach ($jsonobj->printers as $gcpprinter) {
+				$i++;
+				if($i == 1){continue;}
 				$printers[] = array('id' =>$gcpprinter->id,'name' =>$gcpprinter->name,'displayName' =>$gcpprinter->displayName,
-						    'ownerName' => $gcpprinter->ownerName,'connectionStatus' => $gcpprinter->connectionStatus, 'added' => ''
+						    'ownerName' => $gcpprinter->ownerName,'connectionStatus' => $gcpprinter->connectionStatus, 'added' => '', 'color' => ''
 						    );
 			}
 		}

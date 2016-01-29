@@ -25,6 +25,7 @@
       $row = mysqli_fetch_row($dataRetreive);
       if ($username == $row[1]){
         if($password == $row[2]){
+          session_unset();
           $type = $row[3];
           //If is business owner, redirect to business owner page
           if($type == "BO"){
@@ -62,9 +63,10 @@
       }//end if ($username == $row[1])
       else{
       //If username or password is wrong
+      session_unset();
       header("location: login.php?err=invaliduser");
     }
-    } //end if(isset($_POST['login']))
+  } //end if(isset($_POST['login']))
 
     //For sign up checking
     else if(isset($_POST['signup'])){

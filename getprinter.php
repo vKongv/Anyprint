@@ -43,6 +43,28 @@
           array_push($printers, $printer);
         }
         print json_encode($printers);
+      }else if($_GET['q'] == 'printing'){
+        if(isset($_GET['id']) && !empty($_GET['id'])) {
+          $pid = $_GET['id'];
+          $sqlcmd = "SELECT P_ID, P_Name, P_Status, P_ID_G, P_Color FROM printer WHERE printer.PS_ID = $pid;";
+          $dataRetrieve = mysqli_query($dbcon,$sqlcmd);
+          $printers = [];
+          while($row = mysqli_fetch_row($dataRetrieve)){
+            $printer = array(
+              'id' => $row[0],
+              'name' => $row[1],
+              'status' => $row[2],
+              'id_g' => $row[3],
+              'color' => $row[4]
+            );
+            array_push($printers, $printer);
+          }
+          if(count($printers) <= 0){
+            print json_encode("No Printer Available");
+          }else{
+            print json_encode($printers);
+          }
+        }
       }
     }
   // } else{
@@ -52,5 +74,4 @@
   //   )
   //   print json_encode($message);
   // }
-
 ?>

@@ -1,0 +1,90 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../bower_components/paper-header-panel/paper-header-panel.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<dom-module id="user-print-page-1">
+  <template>
+    <iron-ajax
+      id="ajaxgetprinters"
+      url="http://localhost/anyprint/getprinter.php"
+      params='{"q":"printing", "id":"1"}'
+      handle-as="json"
+      last-response="{{printers}}"></iron-ajax>
+      <iron-list items="[[printers]]" as="item" on-click="gotoPrintOption">
+        <template>
+          <div class="item">
+            <div class="details">
+              <div class="primary">
+                <span >[[item.name]]</span>
+              </div>
+              <div class="secondary layout horizontal">
+                <span class="flex">Status: <span >[[item.status]]</span></span>
+                <paper-button raised on-click="gotoPrintOption" class="flex">SELECT THIS PRINTER</paper-button>
+              </div>
+
+            </div>
+          </div>
+        </template>
+      </iron-list>
+  </template>
+  <style is="custom-style">
+    :host {
+      display: block;
+    }
+    .item{
+      @apply(--layout-horizontal);
+      padding: 16px 22px;
+      border-bottom: 1px solid #DDD;
+    }
+    .details {
+      @apply(--layout-flex);
+      @apply(--layout-vertical);
+    }
+    .primary {
+      font-size: 24px;
+    }
+    .space-left{
+      margin-left: 30px;
+    }
+    .spacer {
+      @apply(--layout-flex);
+    }
+    paper-button{
+      color: white;
+      background: #65C6BB;
+    }
+  </style>
+  <script>
+    Polymer({
+      is: 'user-print-page-1',
+      properties: {
+        header: {
+          type: String,
+          value: "Select your document",
+        },
+        shopid: {
+          type: String,
+          observer: "_getPrinter",
+          notify: true
+        }
+      },
+      attached: function() {
+        this.fire('finished_attached',{done: 'true'});
+        //attached function, used to get element id
+      },
+      _getPrinter: function(){
+        var params = {q:"printing", id: this.shopid };
+        this.$.ajaxgetprinters.params = params;
+        this.$.ajaxgetprinters.generateRequest();
+      },
+      gotoPrintOption: function(event){
+        window.location = "printoption.php?printer="+ event.model.item.id_g + "&color=" + event.model.item.color;
+      },
+    });
+  </script>
+</dom-module>

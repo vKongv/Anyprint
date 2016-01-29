@@ -1,0 +1,100 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<dom-module id="user-home">
+  <template>
+    <iron-ajax
+      auto
+      url="../retrieveps.php"
+      params='{"q":"all"}'
+      handle-as="json"
+      last-response="{{printingshops}}"></iron-ajax>
+      <div class="container">
+        <template is="dom-repeat" items="{{printingshops}}" as="item">
+          <paper-card class="printingshop open" heading="[[item.name]]" id="card[[item.id]]">
+            <div class="card-content">
+              [[item.address]]
+            </div>
+            <div class="card-actions">
+              <paper-button class="card-button" raised onclick="popup(event)" id="[[item.id]]">S E L E C T</paper-button>
+            <div>
+          </paper-card>
+        </template>
+      </div>
+      <form id="formGet" method="POST" action="http://localhost/anyprint/testupload.php" enctype="multipart/form-data">
+        <paper-input name="q" id="name" value="all"></paper-input>
+        <paper-input name="file" id="file" type="file"></paper-input>
+        <paper-button raised on-click="submitHandler">Submit</paper-button>
+      </form>
+  </template>
+  <style is="custom-style">
+    paper-card{
+      color: #ffffff;
+    }
+    .open {
+      --paper-card: {
+        background-color: #22A7F0;
+      }
+      --paper-card-header-color: #ffffff;
+    }
+    .close {
+      --paper-card: {
+        background-color: #999999;
+      }
+      --paper-card-header-color: #ffffff;
+    }
+    .container{
+      @apply(--layout-horizontal);
+      width: 90%;
+      margin: auto;
+      margin-top: 36px;
+      margin-bottom: 36px;
+      display:flex;
+      flex-flow: row
+      wrap
+    }
+    .printingshop {
+      min-width: 300px;
+      max-width: 300px;
+      margin: 10px;
+      @apply(--layout-flex);
+      --paper-card-header-text: {
+        font-weight: bold;
+      }
+    }
+    .card-button{
+      background: #65C6BB;
+    }
+    .text-center {
+      text-align: center;
+    }
+    .card-content {
+      margin-bottom: auto;
+      flex:1;
+    }
+    .card-actions {
+      margin-top: auto;
+      padding: 10px;
+    }
+    a{
+      text-decoration: none;
+      color: white;
+    }
+  </style>
+  <script>
+    Polymer({
+      is: 'user-home',
+      submitHandler: function(event){
+        Polymer.dom(event).localTarget.parentElement.submit();
+      }
+    });
+    var popup = function(event){
+      var id = event.srcElement.id;
+      var url = "uploadfile.php?id=" + id;
+      window.open(url,'1453911649684','width=500,height=600,toolbar=0,menubar=0,location=0,status=1,scrollbars=1,resizable=0,left=0,top=0');
+    }
+  </script>
+</dom-module>

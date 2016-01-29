@@ -3,18 +3,8 @@
   //include('request_access_token.php');
 ?>
   <script>
-    var validToken = false;
     var username = "<?php echo $login_session;?>";
   </script>
-<?php
-  if(isset($_SESSION['refresh_token']) && !empty($_SESSION['refresh_token'])){
-?>
-      <script>
-        validToken = true;
-      </script>
-<?php
-    }
-?>
 <!DOCTYPE html>
 <html>
   <head>
@@ -33,9 +23,7 @@
     <link rel="import" href="bower_components/neon-animation/neon-animated-pages.html">
     <link rel="import" href="bower_components/neon-animation/neon-animatable.html">
     <link rel="import" href="bower_components/font-roboto/roboto.html">
-    <link rel="import" href="element/business-home.html">
-    <link rel="import" href="element/business-add-printer.html">
-    <link rel="import" href="element/business-manage-printer.html">
+    <link rel="import" href="element/user-home.html">
 
     <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
     <style is="custom-style">
@@ -67,7 +55,7 @@
         margin-bottom: 10px;
       }
       .secondary{
-        font-size: 24px;
+        font-size: 18px;
       }
       .spacer{
         @apply(--layout-flex);
@@ -87,9 +75,8 @@
           </paper-toolbar>
           <paper-menu selected={{select}} drawer>
             <paper-item>Home Page</paper-item>
-            <paper-item>Add Printer</paper-item>
-            <paper-item>Pending Print Request</paper-item>
-            <paper-item>Manage Printer</paper-item>
+            <paper-item>Printing Progress</paper-item>
+            <paper-item>Printing Progress</paper-item>
             <p>{{select}}</p>
           </paper-menu>
         </paper-header-panel>
@@ -97,17 +84,16 @@
           <paper-toolbar class="medium-tall">
             <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
             <div class="item">
-              <div class="primary">Welcome back</div>
-              <div class="secondary">{{username}}</div>
+              <div class="primary">Welcome back, {{username}}</div>
+              <div class="secondary">Current location: Bukit Beruang, MELAKA</div>
             </div>
             <span class="spacer bottom"></span>
             <paper-button class="bottom" raised>L O G O U T</paper-icon-button>
           </paper-toolbar>
           <neon-animated-pages id="pages" selected="{{select}}">
-            <business-home id ="page1" user-id="<?php echo $_SESSION['login_uid'];?>"></business-home>
-            <business-add-printer id='page2'></business-add-printer>
-            <neon-animation id="page3"><?php echo $_SESSION['access_token']; ?></neon-animation>
-            <business-manage-printer id='page4'></business-manage-printer>
+            <user-home></user-home>
+            <neon-animation id="page2">2</neon-animation>
+            <neon-animation id="page3">3</neon-animation>
           </neon-animated-pages>
         </paper-header-panel>
       </paper-drawer-panel>
@@ -115,16 +101,5 @@
   </body>
 
   <script>
-    //Set username
-    var app = document.querySelector('#app');
-    app.username = username;
-    //When the element is finished loaded, set the login based on the attribute
-    document.addEventListener('finished_attached', function() {
-      if(validToken){
-        document.querySelector('#page2').usableToken = true;
-      } else{
-        document.querySelector('#page2').usableToken = false;
-      }
-    }, false);
   </script>
 </html>

@@ -7,6 +7,7 @@
       $printerid = $_GET['pid'];
       $printername = $_GET['pname'];
       $printerstatus = $_GET['pstatus'];
+      $printercolor = $_GET['pcolor'];
       //Get last printer id
       $sqlcmd = "SELECT P_ID FROM printer,printing_shop,user WHERE user.U_ID = $uid AND user.U_ID = printing_shop.U_ID AND printing_shop.PS_ID = printer.PS_ID ORDER BY P_ID DESC LIMIT 1;";
       $dataRetrieve = mysqli_query($dbcon,$sqlcmd);
@@ -23,7 +24,7 @@
       }else{
         $newpid = $lastpid + 1;
       }
-      $sqlcmd = "INSERT INTO printer (P_ID,P_ID_G,P_Name,P_Status,PS_ID) VALUES($newpid,'$printerid','$printername','$printerstatus',$psid);";
+      $sqlcmd = "INSERT INTO printer (P_ID,P_ID_G,P_Name,P_Status,P_Color,PS_ID) VALUES($newpid,'$printerid','$printername','$printerstatus',$printercolor,$psid);";
       $insertData = mysqli_query($dbcon,$sqlcmd);
       print('after insert');
       if($insertData){

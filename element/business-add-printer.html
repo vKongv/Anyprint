@@ -11,7 +11,7 @@
     <paper-toast id="errorToast2"></paper-toast>
     <iron-ajax
       auto
-      url="http://localhost/anyprint/getprinter.php"
+      url="../getprinter.php"
       params='{"q":"gcp"}'
       handle-as="json"
       last-response="{{printers}}"></iron-ajax>
@@ -53,7 +53,7 @@
         }
       },
       login: function(){
-        window.location= 'http://localhost/anyprint/gcp/oAuthRedirect.php?op=offline';
+        window.location= '../gcp/oAuthRedirect.php?op=offline';
       },
       toggleButton: function(){
         var btn = document.querySelector('#g-signin');
@@ -75,7 +75,7 @@
         }.bind(this));
       },
       goto: function(event){
-         var url = 'http://localhost/anyprint/addprinter.php?pid=' + event.model.item.id + '&pname=' + event.model.item.name + '&pstatus=' + event.model.item.connectionStatus + '&pcolor=' + event.model.item.color;
+         var url = 'addprinter.php?pid=' + event.model.item.id + '&pname=' + event.model.item.name + '&pstatus=' + event.model.item.connectionStatus + '&pcolor=' + event.model.item.color;
          window.location = url;
       },
       ready: function(){

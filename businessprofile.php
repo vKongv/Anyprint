@@ -1,6 +1,5 @@
 <?php
   include('usersession.php');
-  //include('request_access_token.php');
 ?>
   <script>
     var validToken = false;
@@ -101,7 +100,7 @@
               <div class="secondary">{{username}}</div>
             </div>
             <span class="spacer bottom"></span>
-            <paper-button class="bottom" raised>L O G O U T</paper-icon-button>
+            <paper-button class="bottom" raised onclick="logout(event)">L O G O U T</paper-icon-button>
           </paper-toolbar>
           <neon-animated-pages id="pages" selected="{{select}}">
             <business-home id ="page1" user-id="<?php echo $_SESSION['login_uid'];?>"></business-home>
@@ -126,5 +125,9 @@
         document.querySelector('#page2').usableToken = false;
       }
     }, false);
+
+    var logout = function(event){
+      window.location = "logout.php";
+    }
   </script>
 </html>

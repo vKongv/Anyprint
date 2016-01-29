@@ -124,9 +124,7 @@
       );
     }
     $jsonTicket = json_encode($ticket);
-    print($jsonTicket);
     //Get token to access printer first
-    echo $_SESSION['user_printer'];
     $sqlcmd = "SELECT P_ID, U_GRefreshToken FROM user,printer,printing_shop WHERE printer.P_ID_G = '$_SESSION[user_printer]' AND printer.PS_ID = printing_shop.PS_ID AND printing_shop.U_ID = user.U_ID;";
     $dataRetrieve = mysqli_query($dbcon,$sqlcmd);
     $row = mysqli_fetch_row($dataRetrieve);
@@ -140,17 +138,20 @@
     $gcp->setAuthToken($token->access_token);
     $printjob = $gcp->sendPrintToPrinter($_SESSION['user_printer'], $_SESSION['user_jobtitle'],$_SESSION['user_file'],$jsonTicket);
     if($printjob['status']){
-      echo "OK!!!";
-      $sqlcmd = "INSERT INTO print_request (PR_ID,Job_ID,PR_Name, PR_Status, PR_Time,P_ID,U_ID) values($_SESSION[user_prid],'$printjob[id]','$_SESSION[user_jobtitle]','$printjob[status]',now(),$printerid,$_SESSION[login_uid])";
+      $code = rand(1000,9999);
+      $codeString = strval($code);
+      echo $codeString;
+      $sqlcmd = "INSERT INTO print_request (PR_ID,Job_ID,PR_Name, PR_Status, PR_Time,PR_Code,P_ID,U_ID) values($_SESSION[user_prid],'$printjob[id]','$_SESSION[user_jobtitle]','$printjob[status]',now(),$codeString,$printerid,$_SESSION[login_uid])";
       $dataRetrieve = mysqli_query($dbcon,$sqlcmd);
-      print("INSERTED TO DB");
+      if($dataRetrieve){
+        echo "GG";
+      }
+      unset($_SESSION['user_prid'], $_SESSION['user_jobtitle'],$_SESSION['user_prid'],$_SESSION['user_psid'],$_SESSION['user_printer']);
     }
     else{
       echo "Not ok";
       echo $printjob['errormessage'];
     }
-
-
   }
 
 ?>

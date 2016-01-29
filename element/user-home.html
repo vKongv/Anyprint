@@ -19,16 +19,11 @@
               [[item.address]]
             </div>
             <div class="card-actions">
-              <paper-button class="card-button" raised onclick="popup(event)" id="[[item.id]]">S E L E C T</paper-button>
+              <paper-button class$="[[_checkClose(item.status)]]" raised onclick="popup(event)" id="[[item.id]]">S E L E C T</paper-button>
             <div>
           </paper-card>
         </template>
       </div>
-      <form id="formGet" method="POST" action="http://localhost/anyprint/testupload.php" enctype="multipart/form-data">
-        <paper-input name="q" id="name" value="all"></paper-input>
-        <paper-input name="file" id="file" type="file"></paper-input>
-        <paper-button raised on-click="submitHandler">Submit</paper-button>
-      </form>
   </template>
   <style is="custom-style">
     paper-card{
@@ -65,7 +60,10 @@
         font-weight: bold;
       }
     }
-    .card-button{
+    .card-button-close{
+      background: grey;
+    }
+    .card-button-open{
       background: #65C6BB;
     }
     .text-center {
@@ -89,6 +87,15 @@
       is: 'user-home',
       submitHandler: function(event){
         Polymer.dom(event).localTarget.parentElement.submit();
+      },
+      _checkClose: function(status){
+        var classes = "card-button";
+        if(status == "disabled"){
+          classes += '-close';
+        }else{
+          classes += '-open';
+        }
+        return classes;
       }
     });
     var popup = function(event){

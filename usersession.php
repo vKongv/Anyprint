@@ -1,5 +1,4 @@
 <?php
-
   /*
     To store user name into $_SESSION
   */

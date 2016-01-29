@@ -10,11 +10,8 @@
       if($_GET['q'] == 'gcp'){
         $gcp = new GoogleCloudPrint();
 
-        // Replace token you got in offlineToken.php
         $refreshTokenConfig['refresh_token'] = $_SESSION['refresh_token'];
-
         $token = $gcp->getAccessTokenByRefreshToken($urlconfig['refreshtoken_url'],http_build_query($refreshTokenConfig));
-
         $gcp->setAuthToken($token->access_token);
         $printers = $gcp->getPrinters();
 

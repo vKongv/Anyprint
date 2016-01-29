@@ -11,10 +11,10 @@
       while($row = mysqli_fetch_row($dataRetrieve)){
         $OH = (int) str_replace(":","",$row[3]);
         $CH = (int) str_replace(":","",$row[4]);
-        $close = false;
+        $close = "open";
         //If closed
         if($time < $OH || $time > $CH){
-          $close = true;
+          $close = "disabled";
         }
         $printingshop = array(
           "id" => $row[0],

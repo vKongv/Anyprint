@@ -7,7 +7,7 @@
   <template>
     <iron-ajax
       auto
-      url="http://localhost/anyprint/getprinter.php"
+      url="../getprinter.php"
       params='{"q":"local"}'
       handle-as="json"
       last-response="{{printers}}"></iron-ajax>
@@ -57,7 +57,7 @@
         //attached function, used to get element id
       },
       goto: function(event){
-         var url = 'http://localhost/anyprint/deleteprinter.php?pid=' + event.model.item.id;
+         var url = 'deleteprinter.php?pid=' + event.model.item.id;
          window.location = url;
       },
     });

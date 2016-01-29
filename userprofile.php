@@ -24,6 +24,7 @@
     <link rel="import" href="bower_components/neon-animation/neon-animatable.html">
     <link rel="import" href="bower_components/font-roboto/roboto.html">
     <link rel="import" href="element/user-home.html">
+    <link rel="import" href="element/user-print-history.html">
 
     <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
     <style is="custom-style">
@@ -75,8 +76,7 @@
           </paper-toolbar>
           <paper-menu selected={{select}} drawer>
             <paper-item>Home Page</paper-item>
-            <paper-item>Printing Progress</paper-item>
-            <paper-item>Printing Progress</paper-item>
+            <paper-item>Printing History</paper-item>
             <p>{{select}}</p>
           </paper-menu>
         </paper-header-panel>
@@ -88,12 +88,11 @@
               <div class="secondary">Current location: Bukit Beruang, MELAKA</div>
             </div>
             <span class="spacer bottom"></span>
-            <paper-button class="bottom" raised>L O G O U T</paper-icon-button>
+              <paper-button class="bottom" raised onclick="logout(event)">L O G O U T</paper-icon-button>
           </paper-toolbar>
           <neon-animated-pages id="pages" selected="{{select}}">
             <user-home></user-home>
-            <neon-animation id="page2">2</neon-animation>
-            <neon-animation id="page3">3</neon-animation>
+            <user-print-history></user-print-history>
           </neon-animated-pages>
         </paper-header-panel>
       </paper-drawer-panel>
@@ -101,5 +100,10 @@
   </body>
 
   <script>
+    var app = document.querySelector("#app");
+    app.select = 0;
+    var logout = function(event){
+      window.location = "logout.php";
+    }
   </script>
 </html>

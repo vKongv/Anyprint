@@ -11,7 +11,7 @@
   <template>
     <iron-ajax
       id="ajaxgetprinters"
-      url="http://localhost/anyprint/getprinter.php"
+      url="../getprinter.php"
       params='{"q":"printing", "id":"1"}'
       handle-as="json"
       last-response="{{printers}}"></iron-ajax>

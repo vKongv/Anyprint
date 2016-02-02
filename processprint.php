@@ -140,11 +140,16 @@
     if($printjob['status']){
       $code = rand(1000,9999);
       $codeString = strval($code);
-      echo $codeString;
       $sqlcmd = "INSERT INTO print_request (PR_ID,Job_ID,PR_Name, PR_Status, PR_Time,PR_Code,P_ID,U_ID) values($_SESSION[user_prid],'$printjob[id]','$_SESSION[user_jobtitle]','$printjob[status]',now(),$codeString,$printerid,$_SESSION[login_uid])";
       $dataRetrieve = mysqli_query($dbcon,$sqlcmd);
       if($dataRetrieve){
-        echo "GG";
+          ?>
+          <script>
+            alert('Your print job has been submitted! Please take note of the verification code in your print receipt in next page');
+          </script>";
+          <?php
+          unset($_SESSION['user_prid'], $_SESSION['user_jobtitle'],$_SESSION['user_prid'],$_SESSION['user_psid'],$_SESSION['user_printer']);
+          header("Location: viewjobdetails.php?id=" . $printjob[id]);
       }
       unset($_SESSION['user_prid'], $_SESSION['user_jobtitle'],$_SESSION['user_prid'],$_SESSION['user_psid'],$_SESSION['user_printer']);
     }

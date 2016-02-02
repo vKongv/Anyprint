@@ -103,6 +103,7 @@ class GoogleCloudPrint {
 		$this->httpRequest->setUrl($url);
 		$this->httpRequest->setPostData($post_fields);
 		$this->httpRequest->send();
+
 		$response = json_decode($this->httpRequest->getResponse());
 		return $response;
 	}
@@ -155,11 +156,13 @@ class GoogleCloudPrint {
 			$this->httpRequest->send();
 			$responsedata = $this->httpRequest->getResponse();
 			$capabilities = json_decode($responsedata);
-			if(count($capabilities->printers[0]->capabilities->printer->color->option) > 1){
+			$colorOption = strpos($capabilities->printers[0]->capabilities->printer->color->option[0]->type, "COLOR");
+			if($colorOption > 0){
 				$printers[$i]['color'] = "1";
 			}else {
 				$printers[$i]['color'] = "0";
 			}
+			$i++;
 		}
 		return $printers;
 	}

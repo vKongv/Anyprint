@@ -14,7 +14,16 @@
       url="../getprinter.php"
       params='{"q":"printing", "id":"1"}'
       handle-as="json"
-      last-response="{{printers}}"></iron-ajax>
+      last-response="{{printers}}"
+      on-response="checkPStatus"></iron-ajax>
+      <template is="dom-if" if="{{!status}}">
+        <center>
+          <div style="color: grey;">
+            <h2>Sorry, There is currently no printer online...</h2>
+            <h2><a href="" onclick="window.open('', '_self', ''); window.close();">Close this window</a></h2>
+          </div>
+        </center>
+      </template>
       <iron-list items="[[printers]]" as="item" on-click="gotoPrintOption">
         <template>
           <div class="item">
@@ -23,11 +32,10 @@
                 <span >[[item.name]]</span>
               </div>
               <div class="secondary layout horizontal">
-                <span class="flex">Status: <span >[[item.status]]</span></span>
-                <paper-button raised on-click="gotoPrintOption" class="flex">SELECT THIS PRINTER</paper-button>
+                <span class="flex"><span >[[item.color]]</span></span>
               </div>
-
             </div>
+            <paper-button raised on-click="gotoPrintOption">SELECT THIS PRINTER</paper-button>
           </div>
         </template>
       </iron-list>
@@ -47,6 +55,7 @@
     }
     .primary {
       font-size: 24px;
+      font-weight: bolder;
     }
     .space-left{
       margin-left: 30px;
@@ -63,14 +72,13 @@
     Polymer({
       is: 'user-print-page-1',
       properties: {
-        header: {
-          type: String,
-          value: "Select your document",
-        },
         shopid: {
           type: String,
           observer: "_getPrinter",
           notify: true
+        },
+        status : {
+          type: Boolean
         }
       },
       attached: function() {
@@ -81,6 +89,20 @@
         var params = {q:"printing", id: this.shopid };
         this.$.ajaxgetprinters.params = params;
         this.$.ajaxgetprinters.generateRequest();
+      },
+      checkPStatus : function(){
+        if (this.printers.length <= 0){
+          this.status = false;
+        }else{
+          this.status = true;
+          for(i=0;i<this.printers.length;i++){
+            if(this.printers[i].color == "1"){
+              this.printers[i].color = "Color Printing Available";
+            }else{
+              this.printers[i].color = "Black and White Printing Only";
+            }
+          }
+        }
       },
       gotoPrintOption: function(event){
         window.location = "printoption.php?printer="+ event.model.item.id_g + "&color=" + event.model.item.color;

@@ -1,6 +1,6 @@
 <?php
 
-// To add printers to your account follow the following link 
+// To add printers to your account follow the following link
 // https://support.google.com/cloudprint/answer/1686197
 /**
  * PHP implementation of Google Cloud Print
@@ -19,7 +19,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-  
+
 header('Location: oAuthRedirect.php?op=offline');
 
 ?>

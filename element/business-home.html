@@ -21,28 +21,31 @@
       on-error="onFirebaseError"
       on-login="onFirebaseLogin"></firebase-auth>
     <paper-toast id="errorToast"></paper-toast>
-
     <div style="max-width: 600px; margin-top: 20px; margin-left: auto; margin-right: auto; @apply(--layout-vertical); @apply(--center-justified);">
       <template is="dom-repeat" items="{{items}}">
-        <!--Card's ID is set based on item.uid-->
         <iron-swipeable-container>
-        <paper-card id = "card{{item.uid}}" heading="{{item.title}}" style="width: 100%; margin-bottom: 16px;">
-          <div class="card-content">{{item.message}}</div>
+        <paper-card heading="Notification" style="width: 100%; margin-bottom: 16px;">
+          <div class="card-content">{{item.content}}</div>
           <div class="card-actions">
             <paper-icon-button on-click="openNotification" icon="open-in-browser" title="Open"></paper-icon-button>
-            <paper-icon-button id="dismissAction" on-click="dismissNotification" icon="clear" title="Open"></paper-icon-button>
+            <paper-icon-button id="dismissAction" on-click="dismissNotification" icon="clear" title="Dismiss"></paper-icon-button>
           </div>
         </paper-card>
         </iron-swipeable-container>
       </template>
     </div>
-
   </template>
 
   <script>
     Polymer({
       is: 'business-home',
       properties: {
+        items: {
+          type : Array,
+        },
+        isNotification: {
+          type: Boolean
+        },
         userID: {
           type: String,
         }
@@ -52,30 +55,25 @@
       },
       ready: function() {
         this.items = [];
-        this.firebaseURL = 'https://realanyprint.firebaseio.com';
+        this.firebaseURL = 'https://anyprint.firebaseio.com';
         this.firebaseProvider = 'anonymous';
       },
       updateItems: function(snapshot) {
-        var app = document.querySelector('business-home');
+        this.items = [];
         snapshot.forEach(function(childSnapshot) {
           var item = childSnapshot.val();
-          console.log(item);
-          if(item.done){
-            return;
-          }
           item.uid = childSnapshot.key();
           this.push('items', item);
         }.bind(this));
       },
       onFirebaseError: function(event) {
-        this.$.errorToast.text = event.detail.message;
+        this.$.errorToast.text = "Error: Cannot retrieve notification";
         this.$.errorToast.show();
       },
       onFirebaseLogin: function(event) {
         console.log(this.userID);
-        console.log(this.firebaseURL + '/business/' + this.userID + '/content/notification');
-        this.ref = new Firebase(this.firebaseURL + '/business/' + this.userID + '/content/notification');
-        console.log("Logged in");
+        console.log(this.firebaseURL + '/' + this.userID);
+        this.ref = new Firebase(this.firebaseURL + '/' + this.userID);
         var app = document.querySelector('business-home');
            this.ref.on('value', function(snapshot) {
              app.updateItems(snapshot);
@@ -83,21 +81,14 @@
       },
       openNotification: function(event) {
         var app = document.querySelector('#app'); //To get the template section of businessprofile.php
-        app.select = 1; //Set the page
+        app.select = event.model.item.type; //Set the page
+        this.ref.child(event.model.item.uid).remove();
       },
       swipeToDismiss: function(event){
-        var cardAction = document.querySelector('#dismissAction');
-        cardAction.click();
+        this.ref.child(event.model.item.uid).remove();
       },
       dismissNotification: function(event){
-        // var cardID = '#card' + event.model.item.uid; //Each card's ID is set based on the item's uid
-        // var card = document.querySelector(cardID);
-        // console.log(cardID);
-        // card.className = card.className + ' dismiss'; //NOTE: Still developing
-        // console.log(card.className);
-        this.ref.
-        child(event.model.item.uid).
-        update({done: true});
+        this.ref.child(event.model.item.uid).remove();
       }
     });
   </script>

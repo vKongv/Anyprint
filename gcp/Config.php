@@ -30,7 +30,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     $json_arr = json_decode($json_data, true);
     $redirectConfig = array(
         'client_id' 	=> $json_arr["web"]["client_id"],
-        'redirect_uri' 	=> $json_arr["web"]["redirect_uris"][0],
+        'redirect_uri' 	=> "http://localhost/anyprint/oAuthRedirect.php",
         'response_type' => 'code',
         'scope'         => 'https://www.googleapis.com/auth/cloudprint',
     );
@@ -39,7 +39,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         'code' => '',
         'client_id' 	=> $json_arr["web"]["client_id"],
         'client_secret' => $json_arr["web"]["client_secret"],
-        'redirect_uri' 	=> $json_arr["web"]["redirect_uris"][0],
+        'redirect_uri' 	=> "http://localhost/anyprint/oAuthRedirect.php",
         "grant_type"    => "authorization_code"
     );
 

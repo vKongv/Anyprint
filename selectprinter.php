@@ -12,7 +12,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Upload Document</title>
+    <title>Select Printer</title>
     <!-- Import polymer HTML files-->
     <link rel="import" href="bower_components/paper-toolbar/paper-toolbar.html">
     <link rel="import" href="bower_components/iron-flex-layout/iron-flex-layout.html">

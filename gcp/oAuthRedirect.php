@@ -60,7 +60,6 @@ if(isset($_GET['code']) && !empty($_GET['code'])) {
 			exit;
     }
     $_SESSION['access_token'] = $accessToken;
-    echo "$accessToken";
 }
 
 ?>

@@ -13,7 +13,7 @@
       last-response="{{printrequests}}"></iron-ajax>
     <template is="dom-repeat" items=[[printrequests]]>
       <div class="pr-container">
-        <h2>Print Reqeust # [[item.id]]</h2>
+        <h2>Print Reqeust # [[item.id]] : [[item.name]]</h2>
         <p><span>Printing Shop: [[item.shop]]</span> <span class="space-left">Amount: [[item.price]]</span><p>
         <button id="[[item.jobid]]" type="button" on-click="viewDetails">View Details</button>
       </div>
@@ -29,6 +29,7 @@
       background-color: #22A7F0;
       padding: 10px;
       margin: 30px;
+      border-radius: 5px;
     }
   </style>
   <script>

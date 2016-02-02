@@ -2,7 +2,7 @@
   session_start();
     if(isset($_GET['printer']) && !empty($_GET['printer'])) {
       $_SESSION['user_printer'] = $_GET['printer'];
-      if ($_GET['color'] == "0"){
+      if ($_GET['color'] == "Black and White Printing Only"){
         $_SESSION['user_color'] = $_GET['color'];
         ?>
         <script>
@@ -69,7 +69,7 @@
       }
       paper-button{
         color: white;
-        width: 330px;
+        width: 100%;
         background: #65C6BB;
       }
     </style>
@@ -102,7 +102,7 @@
               </tr>
               <tr>
                 <td><p class="indicator">Pages (0=ALL)<p></td>
-                <td><input is="iron-input" class="number-medium" allowed-pattern="[-,0-9]" value="0" bind-value={{range}}></td>
+                <td><input is="iron-input" class="number-medium" allowed-pattern="[-0-9]" value="0" bind-value={{range}}></td>
               </tr>
             </table>
             <input type="hidden" name="copies" id="copies">

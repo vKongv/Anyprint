@@ -21,7 +21,7 @@
     $sqlcmd = "UPDATE print_request SET PR_Status = '$status' WHERE Job_ID = '$jobid' ";
     $dataRetrieve = mysqli_query($dbcon,$sqlcmd);
 
-    //
+    //Select the print request to be diplay
     $sqlcmd = "SELECT PR_ID, PR_Name, PR_Price, PR_Code FROM print_request WHERE Job_ID = '$jobid'";
     $dataRetrieve = mysqli_query($dbcon,$sqlcmd);
     $row = mysqli_fetch_row($dataRetrieve);
@@ -59,13 +59,17 @@
         font-family: Roboto;
       }
       .center{
-        max-width: 300px;
+        max-width: 350px;
         max-height: 400px;
         margin: auto;
-        margin-top: 30px;
+        margin-top: 100px;
       }
       .indicator {
         margin-right: 40px;
+        font-weight: bold;
+      }
+      #important {
+        color: red;
         font-weight: bold;
       }
     </style>
@@ -78,10 +82,11 @@
           <div><h1> Print details # {{prid}} <h1></div>
         </paper-toolbar>
         <div class="center">
+          <h2 style="color:grey;">Treat this as your digital receipt</h2>
           <table>
             <tr>
               <td><p class="indicator">ID:</p></td>
-              <td><p>#{{prid}}</p></td>
+              <td><p id="important">#{{prid}}</p></td>
             </tr>
             <tr>
               <td><p class="indicator">Document:</p></td>
@@ -89,11 +94,11 @@
             </tr>
             <tr>
               <td><p class="indicator">Verification Code:</p></td>
-              <td><p>{{code}}<p></td>
+              <td><p id="important">{{code}}<p></td>
             </tr>
             <tr>
               <td><p class="indicator">Status:</p></td>
-              <td><p>{{status}}</p></td>
+              <td><p id="important">{{status}}</p></td>
             </tr>
             <tr>
               <td><p class="indicator">Price:</p></td>

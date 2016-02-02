@@ -8,13 +8,11 @@
 	$dbcon = mysqli_connect($hostname,$dbusername,$dbpassword,$database) or die("ERROR: Could not connect to the database.");
 	//connect to anyprint database
   $acceptTypes = array(
-    'docx',
-    'doc',
-    'rtf',
-    'ppt',
-    'pptx',
-    'pdf',
-    'jpg',
-    'png'
+    'pdf'
+  );
+  $gcpStatus = array(
+    'QUEUED',
+    'FINISHED',
+    'IN_PROGRESS'
   );
 ?>

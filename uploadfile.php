@@ -1,8 +1,8 @@
 <?php
   session_start();
-  if(isset($_GET['id']) && !empty($_GET['id'])) {
+  if(isset($_GET['id'])) {
     $_SESSION['user_psid'] = $_GET["id"];
-    if(isset($_GET['status']) && !empty($_GET['status'])){
+    if(isset($_GET['status'])){
       if($_GET['status'] == "err"){
 ?>
         <script>
@@ -14,7 +14,7 @@
   }else{
     exit();
   }
-  echo "s";
+  echo "_";
 ?>
 <!DOCTYPE html>
 <html>
@@ -31,7 +31,6 @@
     <link rel="import" href="bower_components/paper-item/paper-item.html">
     <link rel="import" href="bower_components/paper-header-panel/paper-header-panel.html">
     <link rel="import" href="bower_components/font-roboto/roboto.html">
-    <link rel="import" href="element/user-print-page-1.html">
 
     <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
     <style is="custom-style">
@@ -51,7 +50,7 @@
         @apply(--layout-flex);
       }
       #file {
-        margin-bottom: 300px;
+        margin-bottom: 270px;
       }
       paper-button {
         color: white;
@@ -60,6 +59,13 @@
       .warning {
         --paper-toast-background-color: #F7CA18;
         --paper-toast-color: white;
+      }
+      #helper-text {
+        font-size: 12px;
+        display: block;
+      }
+      #helper-indicator:hover #helper-text {
+        display: block;
       }
     </style>
   </head>
@@ -72,6 +78,10 @@
         </paper-toolbar>
         <div class="center">
           <form id="uploadfile" method="POST" action="processfile.php" enctype="multipart/form-data">
+            <div style="color:grey; margin-bottom:30px;">
+              <h2 style="margin-bottom: 5px;">Accept ONLY PDF file</h2>
+              <span id="helper-indicator" style="font-size:12px;">Click <a href="http://smallpdf.com/" label="Convert to PDF">here</a> to convert your file to PDF</span>
+            </div>
             <input name="file" id="file" type="file">
             <paper-button raised on-click="submitform">U P L O A D</paper-button>
           </form>

@@ -8,25 +8,32 @@
     if(isset($_GET['q']) && !empty($_GET['q'])) {
       $uid = $_SESSION['login_uid'];
       if($_GET['q'] == 'gcp'){
-        $gcp = new GoogleCloudPrint();
+        if($_SESSION['refresh_token'] != "ERROR"){
+          $gcp = new GoogleCloudPrint();
 
-        $refreshTokenConfig['refresh_token'] = $_SESSION['refresh_token'];
-        $token = $gcp->getAccessTokenByRefreshToken($urlconfig['refreshtoken_url'],http_build_query($refreshTokenConfig));
-        $gcp->setAuthToken($token->access_token);
-        $printers = $gcp->getPrinters();
+          $refreshTokenConfig['refresh_token'] = $_SESSION['refresh_token'];
+          $token = $gcp->getAccessTokenByRefreshToken($urlconfig['refreshtoken_url'],http_build_query($refreshTokenConfig));
+          $gcp->setAuthToken($token->access_token);
+          $printers = $gcp->getPrinters();
 
-        $sqlcmd = "SELECT P_ID_G FROM user,printer,printing_shop WHERE user.U_ID = $uid AND user.U_ID = printing_shop.U_ID AND printing_shop.PS_ID = printer.PS_ID;";
-        $dataRetrieve = mysqli_query($dbcon,$sqlcmd);
+          $sqlcmd = "SELECT P_ID_G FROM user,printer,printing_shop WHERE user.U_ID = $uid AND user.U_ID = printing_shop.U_ID AND printing_shop.PS_ID = printer.PS_ID;";
+          $dataRetrieve = mysqli_query($dbcon,$sqlcmd);
 
-        while($row = mysqli_fetch_row($dataRetrieve)){
-        	for($i=0; $i<count($printers);$i++){
-        		if($printers[$i]['id'] == $row[0]){
-        			$printers[$i]['added'] = 'disabled';
-        		}
-        	}
-        }
-
-        print json_encode($printers);
+          while($row = mysqli_fetch_row($dataRetrieve)){
+          	for($i=0; $i<count($printers);$i++){
+          		if($printers[$i]['id'] == $row[0]){
+          			$printers[$i]['added'] = 'disabled';
+                $tempStatus = $printers[$i]['connectionStatus'];
+                $secondSql = "UPDATE printer SET P_Status = '$tempStatus' WHERE P_ID_G = '$row[0]';";
+                $updateTable = mysqli_query($dbcon,$secondSql);
+          		}
+          	}
+          }
+           print json_encode($printers);
+         }else{
+           $nothing = array();
+           print json_encode($nothing);
+         }
       }else if($_GET['q'] == 'local'){
         $sqlcmd = "SELECT P_ID, P_Name, P_Status FROM user,printer,printing_shop WHERE user.U_ID = $uid AND user.U_ID = printing_shop.U_ID AND printing_shop.PS_ID = printer.PS_ID;";
         $dataRetrieve = mysqli_query($dbcon,$sqlcmd);
@@ -43,7 +50,7 @@
       }else if($_GET['q'] == 'printing'){
         if(isset($_GET['id']) && !empty($_GET['id'])) {
           $pid = $_GET['id'];
-          $sqlcmd = "SELECT P_ID, P_Name, P_Status, P_ID_G, P_Color FROM printer WHERE printer.PS_ID = $pid;";
+          $sqlcmd = "SELECT P_ID, P_Name, P_Status, P_ID_G, P_Color FROM printer, printing_shop WHERE printer.PS_ID = $pid AND printer.PS_ID = printing_shop.PS_ID;";
           $dataRetrieve = mysqli_query($dbcon,$sqlcmd);
           $printers = [];
           while($row = mysqli_fetch_row($dataRetrieve)){
@@ -57,18 +64,12 @@
             array_push($printers, $printer);
           }
           if(count($printers) <= 0){
-            print json_encode("No Printer Available");
+            $empty = array();
+            print json_encode($empty);
           }else{
             print json_encode($printers);
           }
         }
       }
     }
-  // } else{
-  //   $message = array(
-  //     'err' = '1',
-  //     'errMsg' = 'No access token is set';
-  //   )
-  //   print json_encode($message);
-  // }
 ?>

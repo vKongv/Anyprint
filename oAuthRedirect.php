@@ -44,23 +44,21 @@ session_start();
 
 // Google redirected back with code in query string.
 if(isset($_GET['code']) && !empty($_GET['code'])) {
-
     $code = $_GET['code'];
     $authConfig['code'] = $code;
 
     // Create object
     $gcp = new GoogleCloudPrint();
     $responseObj = $gcp->getAccessToken($urlconfig['accesstoken_url'],$authConfig);
-
     $accessToken = $responseObj->access_token;
 
     // We requested offline access
     if (isset($responseObj->refresh_token)) {
-				header("Location: gcp/offlineToken.php?offlinetoken=".$responseObj->refresh_token);
-				exit;
+			$_SESSION['access_token'] = $accessToken;
+			sleep(0.5);
+			header("Location: gcp/offlineToken.php?offlinetoken=".$responseObj->refresh_token);
+			exit;
     }
-    $_SESSION['accessToken'] = $accessToken;
-    header("Location: example.php");
+    $_SESSION['access_token'] = $accessToken;
 }
-
 ?>

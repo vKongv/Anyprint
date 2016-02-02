@@ -1,6 +1,18 @@
 <?php
   include('usersession.php');
-  //include('request_access_token.php');
+  if(isset($_GET['location'])){
+    ?>
+    <script>
+      var displayLocation = "<?php echo $_GET['location'];?>";
+    </script>
+    <?php
+  }else{
+    ?>
+    <script>
+      var displayLocation = "All";
+    </script>
+    <?php
+  }
 ?>
   <script>
     var username = "<?php echo $login_session;?>";
@@ -77,7 +89,6 @@
           <paper-menu selected={{select}} drawer>
             <paper-item>Home Page</paper-item>
             <paper-item>Printing History</paper-item>
-            <p>{{select}}</p>
           </paper-menu>
         </paper-header-panel>
         <paper-header-panel main mode="seamed">
@@ -85,7 +96,7 @@
             <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
             <div class="item">
               <div class="primary">Welcome back, {{username}}</div>
-              <div class="secondary">Current location: Bukit Beruang, MELAKA</div>
+              <div class="secondary">Print Anywhere, Anytime</div>
             </div>
             <span class="spacer bottom"></span>
               <paper-button class="bottom" raised onclick="logout(event)">L O G O U T</paper-icon-button>
@@ -102,6 +113,8 @@
   <script>
     var app = document.querySelector("#app");
     app.select = 0;
+    app.username = username;
+    app.currentLocation = displayLocation;
     var logout = function(event){
       window.location = "logout.php";
     }

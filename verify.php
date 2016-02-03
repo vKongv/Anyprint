@@ -77,7 +77,6 @@
         $password = $_POST['upassword'];
         $hpnum = $_POST['uhpnum'];
 
-        echo "before $_POST";
         // To protect MySQL injection for Security purpose
         $username = stripslashes($username);
         $email = stripslashes($email);
@@ -88,7 +87,6 @@
         $password = mysql_real_escape_string($password);
         $hpnum = mysql_real_escape_string($hpnum);
 
-        echo "after $hpnum";
         //Define a variable to hold error message
         $errMsg = "";
         $sqlcmd = "SELECT U_ID, U_Name, U_HP, U_Email FROM user;";

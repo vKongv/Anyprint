@@ -7,6 +7,6 @@
     $msgContent = "Your verification code is " . strval($code);
     $content = new Message();
     $content->sendMessage($hpnum,$msgContent);
-    print strval($code);
+    print($code);
   }
 ?>

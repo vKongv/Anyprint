@@ -79,7 +79,8 @@
         }
       },
       ready : function() {
-        this.items = []
+        this.printers = [];
+        this.items = [];
         this.firebaseURL = 'https://anyprint.firebaseio.com';
         this.firebaseProvider = 'anonymous';
         },
@@ -112,13 +113,12 @@
           this.status = true;
         }
         //Check printer's online status
-        for(i = 0; i< this.printers.length; i++){
-          console.log(this.printers.length);
-          if(this.printers[i].status != "ONLINE"){
-            var message = "Printer " + this.printers[i].name + " is offline. Please check the connection.";
+        for(j = 0; j< this.printers.length; j++){
+          if(this.printers[j].status != "ONLINE"){
+            var message = "Printer " + this.printers[j].name + " is offline. Please check the connection.";
             var canAdd = true;
-            for(i = 0; i< this.items.length; i++){
-              if(message == this.items[i].content){
+            for(k = 0; k< this.items.length; k++){
+              if(message == this.items[k].content){
                 canAdd = false
                 break;
               }

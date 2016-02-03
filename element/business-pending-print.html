@@ -83,6 +83,7 @@
         }
       },
       ready : function() {
+        this.printrequests = [];
         this.items = [];
         this.firebaseURL = 'https://anyprint.firebaseio.com';
         this.firebaseProvider = 'anonymous';
@@ -96,7 +97,7 @@
         }.bind(this));
       },
       checkPRnum: function(){
-        if(this.printrequests.length <=0 ){
+        if(this.printrequests.length <= 0 ){
           this.status = false;
         }else{
           this.status = true;

@@ -16,7 +16,7 @@
           $gcp->setAuthToken($token->access_token);
           $printers = $gcp->getPrinters();
 
-          $sqlcmd = "SELECT P_ID_G FROM user,printer,printing_shop WHERE user.U_ID = $uid AND user.U_ID = printing_shop.U_ID AND printing_shop.PS_ID = printer.PS_ID;";
+          $sqlcmd = "SELECT P_ID_G FROM user,printer,printing_shop WHERE user.U_ID = $uid AND user.U_ID = printing_shop.U_ID AND printing_shop.PS_ID = printer.PS_ID AND P_Deleted = 0;";
           $dataRetrieve = mysqli_query($dbcon,$sqlcmd);
 
           while($row = mysqli_fetch_row($dataRetrieve)){
@@ -35,7 +35,7 @@
            print json_encode($nothing);
          }
       }else if($_GET['q'] == 'local'){
-        $sqlcmd = "SELECT P_ID, P_Name, P_Status FROM user,printer,printing_shop WHERE user.U_ID = $uid AND user.U_ID = printing_shop.U_ID AND printing_shop.PS_ID = printer.PS_ID;";
+        $sqlcmd = "SELECT P_ID, P_Name, P_Status FROM user,printer,printing_shop WHERE user.U_ID = $uid AND user.U_ID = printing_shop.U_ID AND printing_shop.PS_ID = printer.PS_ID AND P_Deleted = 0;";
         $dataRetrieve = mysqli_query($dbcon,$sqlcmd);
         $printers = [];
         while($row = mysqli_fetch_row($dataRetrieve)){
@@ -50,7 +50,7 @@
       }else if($_GET['q'] == 'printing'){
         if(isset($_GET['id']) && !empty($_GET['id'])) {
           $pid = $_GET['id'];
-          $sqlcmd = "SELECT P_ID, P_Name, P_Status, P_ID_G, P_Color FROM printer, printing_shop WHERE printer.PS_ID = $pid AND printer.PS_ID = printing_shop.PS_ID;";
+          $sqlcmd = "SELECT P_ID, P_Name, P_Status, P_ID_G, P_Color FROM printer, printing_shop WHERE printer.PS_ID = $pid AND printer.PS_ID = printing_shop.PS_ID AND P_Status = 'ONLINE' AND P_Deleted = 0;";
           $dataRetrieve = mysqli_query($dbcon,$sqlcmd);
           $printers = [];
           while($row = mysqli_fetch_row($dataRetrieve)){

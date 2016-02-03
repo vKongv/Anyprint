@@ -98,7 +98,7 @@
       }
       paper-button{
         color: white;
-        width: 330px;
+        width: 100%;
         background: #65C6BB;
       }
       .alert{

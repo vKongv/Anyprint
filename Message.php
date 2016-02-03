@@ -43,6 +43,7 @@
         //Get the body of the response, it is a JSON file.
         $json = $response->getBody();
         $decoded = json_decode($json,true);
+        return $decoded;
       }
     }
 ?>

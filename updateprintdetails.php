@@ -14,7 +14,6 @@
           $statusUpdate = false;
         }
         if($newAmount == "0"){
-          echo "NO";
           $amountUpdate = false;
         }
         //Update database
@@ -40,7 +39,6 @@
             $dataRetrieve = mysqli_query($dbcon,$sqlcmd);
             $row = mysqli_fetch_row($dataRetrieve);
             $hpNum = $row[0];
-            print($row[0]);
             $msgContent = "Your Print Request # " . $jobid . " is RM " . $newAmount;
             $newMessage = new Message();
             $newMessage->sendMessage($hpNum,$msgContent);

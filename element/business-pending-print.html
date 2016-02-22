@@ -31,7 +31,7 @@
               <b>Print Reqeust # [[item.id]]</b>
             </div>
             <div class="secondary">
-              From: <span class="highlight">[[item.name]] ([[item.status]])</span>
+              From: <a id="[[item.name]]"href="#" on-click="viewUserDetails">[[item.name]] ([[item.status]])</a>
             </div>
           </div>
           <div>
@@ -40,6 +40,9 @@
     </template>
   </template>
   <style>
+  a:visited{
+    color: blue;
+  }
   :host {
     display: block;
   }
@@ -132,6 +135,11 @@
              });
             this.$.retrievepr.generateRequest();
         },
+      viewUserDetails : function(event){
+        var id = event.srcElement.id;
+        var url = "viewuserdetails.php?name=" + id;
+        window.open(url,'1453911649684','width=500,height=200,toolbar=0,menubar=0,location=0,status=1,scrollbars=1,resizable=0,left=0,top=0');
+      }
     });
   </script>
 </dom-module>

@@ -6,21 +6,26 @@
   session_start();
   if(isset($_GET['id']) && !empty($_GET['id'])) {
     $jobid = $_GET['id'];
-    //Get Access Token
-    $sqlcmd = "SELECT U_GRefreshToken FROM user,printer, print_request, printing_shop WHERE print_request.Job_ID = '$jobid' AND printer.P_ID = print_request.P_ID AND printer.PS_ID = printing_shop.PS_ID";
+    //Check if the order is completed or not
+     $sqlcmd = "SELECT PR_Status FROM print_request WHERE Job_ID = '$jobid';";
     $dataRetrieve = mysqli_query($dbcon,$sqlcmd);
     $row = mysqli_fetch_row($dataRetrieve);
-    $token = $row[0];
-    //Update job status
-    $gcp = new GoogleCloudPrint();
-    $refreshTokenConfig['refresh_token'] = $token;
-    $token = $gcp->getAccessTokenByRefreshToken($urlconfig['refreshtoken_url'],http_build_query($refreshTokenConfig));
-
-    $gcp->setAuthToken($token->access_token);
-    $status = $gcp->jobStatus($jobid);
-    $sqlcmd = "UPDATE print_request SET PR_Status = '$status' WHERE Job_ID = '$jobid' ";
-    $dataRetrieve = mysqli_query($dbcon,$sqlcmd);
-
+    $status = $row[0];
+    //If the status is not COMPLETED
+    if($status != "COMPLETED"){
+      $sqlcmd = "SELECT user.U_GRefreshToken FROM user,printer, print_request, printing_shop WHERE print_request.Job_ID = '711f1336-4192-0c98-d30f-3925db61db74' AND printer.P_ID = print_request.P_ID AND printer.PS_ID = printing_shop.PS_ID AND printing_shop.U_ID = user.U_ID;";
+      $dataRetrieve = mysqli_query($dbcon,$sqlcmd);
+      $row = mysqli_fetch_row($dataRetrieve);
+      $token = $row[0];
+      //Update job status
+      $gcp = new GoogleCloudPrint();
+      $refreshTokenConfig['refresh_token'] = $token;
+      $token = $gcp->getAccessTokenByRefreshToken($urlconfig['refreshtoken_url'],http_build_query($refreshTokenConfig));
+      $gcp->setAuthToken($token->access_token);
+      $status = $gcp->jobStatus($jobid);
+      $sqlcmd = "UPDATE print_request SET PR_Status = '$status' WHERE Job_ID = '$jobid' ";
+      $dataRetrieve = mysqli_query($dbcon,$sqlcmd);
+    }
     //Select the print request to be diplay
     $sqlcmd = "SELECT PR_ID, PR_Name, PR_Price, PR_Code FROM print_request WHERE Job_ID = '$jobid'";
     $dataRetrieve = mysqli_query($dbcon,$sqlcmd);

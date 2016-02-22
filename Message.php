@@ -8,7 +8,7 @@
     private $accecctoken;
 
     public function __construct() {
-  		$this->accesstoken = "o.kxVFnnEFWK1eBWClp9x3sEt8wliX0d2e";
+  		$this->accesstoken = "o.b2uQDDzeXaAS1ZLqQfA1VhJaUbs3YiBH";
   	}
 
     public function sendMessage($targetHPNum, $content){
@@ -29,7 +29,7 @@
             'message' => $content,
             'package_name' => 'com.pushbullet.android',
             'source_user_iden' => 'ujxLcTi4vRI',
-            'target_device_iden' => 'ujxLcTi4vRIsjAiVsKnSTs',
+            'target_device_iden' => 'ujxLcTi4vRIsjz705fMHim',
             'type' => 'messaging_extension_reply'
           ),
           'type' => 'push'

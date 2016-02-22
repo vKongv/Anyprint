@@ -71,9 +71,9 @@
         this.$.errorToast.show();
       },
       onFirebaseLogin: function(event) {
-        console.log(this.userID);
-        console.log(this.firebaseURL + '/' + this.userID);
-        this.ref = new Firebase(this.firebaseURL + '/' + this.userID);
+        this.ref = new Firebase(this.firebaseURL );
+        this.ref.child(this.userID).remove();
+        this.ref = new Firebase(this.firebaseURL + "/" + this.userID);
         var app = document.querySelector('business-home');
            this.ref.on('value', function(snapshot) {
              app.updateItems(snapshot);

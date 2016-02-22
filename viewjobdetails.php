@@ -13,7 +13,7 @@
     $status = $row[0];
     //If the status is not COMPLETED
     if($status != "COMPLETED"){
-      $sqlcmd = "SELECT user.U_GRefreshToken FROM user,printer, print_request, printing_shop WHERE print_request.Job_ID = '711f1336-4192-0c98-d30f-3925db61db74' AND printer.P_ID = print_request.P_ID AND printer.PS_ID = printing_shop.PS_ID AND printing_shop.U_ID = user.U_ID;";
+      $sqlcmd = "SELECT user.U_GRefreshToken FROM user,printer, print_request, printing_shop WHERE print_request.Job_ID = '$jobid' AND printer.P_ID = print_request.P_ID AND printer.PS_ID = printing_shop.PS_ID AND printing_shop.U_ID = user.U_ID;";
       $dataRetrieve = mysqli_query($dbcon,$sqlcmd);
       $row = mysqli_fetch_row($dataRetrieve);
       $token = $row[0];

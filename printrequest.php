@@ -5,7 +5,7 @@
     $uid = $_SESSION['login_uid'];
     //if business owner want to view
     if(isset($_GET['business']) && !empty($_GET['business'])){
-          $sqlcmd = "SELECT PR_ID,PR_Status, PR_Code, print_request.U_ID FROM user,printer, print_request, printing_shop WHERE user.U_ID = $uid AND PR_Status != 'COMPLETED' AND printing_shop.U_ID = user.U_ID AND printer.P_ID = print_request.P_ID AND printer.PS_ID = printing_shop.PS_ID";
+          $sqlcmd = "SELECT PR_ID,PR_Status, PR_Code, print_request.U_ID, PR_Price FROM user,printer, print_request, printing_shop WHERE user.U_ID = $uid AND PR_Status != 'COMPLETED' AND printing_shop.U_ID = user.U_ID AND printer.P_ID = print_request.P_ID AND printer.PS_ID = printing_shop.PS_ID";
           $printrequests = [];
           $printusers = [];
           $dataRetrieve = mysqli_query($dbcon,$sqlcmd);
@@ -15,7 +15,8 @@
               "name" => "",
               "status" => "",
               "code" => $row[2],
-              "prstatus" => $row[1]
+              "prstatus" => $row[1],
+              "price" => $row[4]
             );
             array_push($printrequests,$printrequest);
             array_push($printusers,$row[3]);
